@@ -1,12 +1,12 @@
 server:
-  port: 9999
+  port: ${SERVER_PORT:9999}
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: mydb
-    password: mydb
-    url: jdbc:mysql://localhost:3306/mydb?userUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:mydb}
+    password: ${DB_PASSWORD:mydb}
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:mydb}?userUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
 
   servlet:
     multipart:
@@ -14,10 +14,13 @@ spring:
       max-request-size: 50MB   # 总请求大小限制
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      database: 0
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
       timeout: 5000
+
+app:
+  upload-dir: ${APP_UPLOAD_DIR:${user.dir}/files}
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
