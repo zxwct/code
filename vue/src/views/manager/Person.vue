@@ -17,7 +17,7 @@
     </el-form-item>
     <el-form-item prop="avatar" label="头像">
       <el-upload
-          action="http://localhost:9999/files/upload"
+          action="/api/files/upload"
           :show-file-list="false"
           :headers="{token: data.user.token}"
           :on-success="handleFileSuccess"

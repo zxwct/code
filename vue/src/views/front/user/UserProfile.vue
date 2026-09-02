@@ -52,7 +52,7 @@ const update = () =>{
       <div class="profile-title">个人信息</div>
 
       <el-upload
-          action="http://localhost:9999/files/upload"
+          action="/api/files/upload"
           :show-file-list="false"
           :headers="{ token: data.user.token }"
           :on-success="handleFileSuccess"

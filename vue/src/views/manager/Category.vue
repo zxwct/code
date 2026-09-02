@@ -74,7 +74,7 @@
       </el-form-item>
       <el-form-item prop="icon" label="图标">
         <el-upload
-            action="http://localhost:9999/files/upload"
+            action="/api/files/upload"
             :show-file-list="false"
             :headers="{token: data.user.token}"
             :on-success="handleIconSuccess"
@@ -112,7 +112,7 @@
 
       <el-form-item prop="img" label="图片">
         <el-upload
-            action="http://localhost:9999/files/upload"
+            action="/api/files/upload"
             :show-file-list="false"
             :headers="{token: data.user.token}"
             :on-success="handleImgSuccess"

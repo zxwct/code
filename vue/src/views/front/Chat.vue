@@ -75,7 +75,7 @@
           <div class="chat-input">
             <div class="tools">
               <el-upload
-                  action="http://localhost:9999/files/upload"
+                  action="/api/files/upload"
                   :show-file-list="false"
                   :on-success="sendImgMessage"
               >
@@ -221,8 +221,9 @@ const loadMessage = (fromUserId,toUserId) => {
 /* ---------------- WebSocket ---------------- */
 
 const initWebSocket = () => {
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   socket = new WebSocket(
-      `ws://localhost:9999/chatServer/${user.id}`
+      `${wsProtocol}//${window.location.host}/ws/chatServer/${user.id}`
   );
 
   socket.onopen = () => {

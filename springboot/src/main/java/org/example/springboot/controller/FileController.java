@@ -7,6 +7,7 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.springboot.common.Result;
 import org.example.springboot.exception.CustomerException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,13 @@ import java.util.Map;
 @RequestMapping("/files")
 public class FileController {
 
+    @Value("${app.upload-dir}")
+    private String uploadDir;
+
+    private String filePath() {
+        return FileUtil.normalize(uploadDir) + "/";
+    }
+
     /**
      * 文件上传
      */
@@ -29,7 +37,7 @@ public class FileController {
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file) throws Exception{
         //找到文件位置
-        String filePath= System.getProperty("user.dir")+"/files/";
+        String filePath = filePath();
         if (!FileUtil.isDirectory(filePath)) {
             FileUtil.mkdir(filePath);
         }
@@ -37,19 +45,19 @@ public class FileController {
         String fileName =System.currentTimeMillis()+"_"+file.getOriginalFilename();
         // 写入文件
         FileUtil.writeBytes(bytes, filePath+fileName);
-        String url ="http://localhost:9999/files/download/"+fileName;
+        String url = "/api/files/download/" + fileName;
         return Result.success(url);
     }
 
     /**
      * 文件下载
-     *下载路径："http://localhost:9999/files/download/780.jpg"
+     * 下载路径："/api/files/download/780.jpg"
      */
 
     @GetMapping("/download/{fileName}")
     public void download(@PathVariable String fileName, HttpServletResponse response) throws Exception {
         //找到文件位置
-        String filePath= System.getProperty("user.dir")+"/files/";//获取当前项目的根路径（code的绝对路径）
+        String filePath = filePath();
         String realPath = filePath+fileName; //  E:\毕设\代码\code\files\780.jpg
         boolean exist = FileUtil.exist(realPath);
         if (!exist) {
@@ -78,7 +86,7 @@ public class FileController {
         String fileName=file.getOriginalFilename();
         try {
             //找到文件位置
-            String filePath= System.getProperty("user.dir")+"/files/";
+            String filePath = filePath();
             //文件存储形式：时间戳_文件名
             FileUtil.writeBytes(file.getBytes(),filePath + flag +"_"+fileName);
             System.out.println(fileName +"--上传成功");
@@ -86,7 +94,7 @@ public class FileController {
         }catch (Exception e){
             System.err.println(fileName+"--文件上传失败");
         }
-        String http = "http://localhost:9999/files/download/";
+        String http = "/api/files/download/";
         Map<String,Object> resMap =new HashMap<>();
         //wangEditor上传图片成功后，需要返回的参数
         resMap.put("errno",0);

@@ -3,7 +3,9 @@ import {ElMessage} from "element-plus";
 import router from "@/router/index.js";
 
 const request = axios.create({
-    baseURL: 'http://localhost:9999',
+    // 生产环境由宝塔 Nginx 将 /api 转发到 Spring Boot。
+    // 开发环境由 vite.config.js 中的代理转发到 localhost:9999。
+    baseURL: '/api',
     timeout: 10000
 })
 

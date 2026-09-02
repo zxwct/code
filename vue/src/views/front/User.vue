@@ -155,7 +155,7 @@
 
       <el-form-item prop="img" label="商品图片">
         <el-upload
-            action="http://localhost:9999/files/upload"
+            action="/api/files/upload"
             :show-file-list="false"
             :headers="{token: data.user.token}"
             :on-success="handleImgSuccess"
@@ -212,7 +212,7 @@
         </div>
 
         <el-upload
-            action="http://localhost:9999/files/upload"
+            action="/api/files/upload"
             :show-file-list="false"
             :headers="{token: data.user.token}"
             :on-success="handleImgListSuccess"
@@ -379,7 +379,7 @@ editorConfig.MENU_CONF['uploadImage'] ={
   headers:{
     token: data.user.token,
   },
-  server: 'http://localhost:9999/files/wang/upload', //服务端图片上传接口
+  server: '/api/files/wang/upload', //服务端图片上传接口
   fieldName: 'file', //服务端图片上传接口参数
 }
 //组件销毁时，也及时销毁编辑器，否则可能会造成内存泄漏

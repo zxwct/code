@@ -6,16 +6,31 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:9999',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/ws': {
+        target: 'ws://localhost:9999',
+        ws: true,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ws/, ''),
+      },
+    },
+  },
   plugins: [
     vue(),
     AutoImport({
       resolvers:[ElementPlusResolver()],
-      dts: "src/auto-imports.d.ts", // 生成 API 类型声明
+      dts: command === 'serve' ? "src/auto-imports.d.ts" : false, // 仅开发时生成类型声明
       }),
     Components({
         resolvers:[ElementPlusResolver({importStyle:"sass"})],
-        dts: "src/components.d.ts", // 生成组件类型声明
+        dts: command === 'serve' ? "src/components.d.ts" : false, // 仅开发时生成组件类型声明
       }),
   ],
   css: {
@@ -30,4 +45,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-})
+}))

@@ -55,7 +55,7 @@
     <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding: 20px 30px 10px 0">
       <el-form-item prop="img" label="轮播图">
         <el-upload
-            action="http://localhost:9999/files/upload"
+            action="/api/files/upload"
             :show-file-list="false"
             :headers="{token: data.user.token}"
             :on-success="handleFileSuccess"

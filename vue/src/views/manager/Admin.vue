@@ -12,7 +12,7 @@
       <el-button type="success" @click="exportData">批量导出</el-button>
       <el-upload
           style="display: inline-block; margin-left: 10px"
-          action="http://localhost:9999/admin/import"
+          action="/api/admin/import"
           :show-file-list="false"
           :on-success="handleImportSuccess"
       >
@@ -73,7 +73,7 @@
         </el-form-item>
         <el-form-item prop="avatar" label="头像">
           <el-upload
-              action="http://localhost:9999/files/upload"
+              action="/api/files/upload"
               :show-file-list="false"
               :headers="{token: data.user.token}"
               :on-success="handleFileSuccess"
@@ -283,7 +283,7 @@ const deleteBatch = () =>{
 
 const exportData =()=>{
   let idsStr =data.ids.join(",")  //把数组转换为 字符串 [1,2,3] -> "1,2,3"
-  let url =`http://localhost:9999/admin/export?username=${data.username === null ? '' : data.username}`
+  let url =`/api/admin/export?username=${data.username === null ? '' : data.username}`
   + `&name=${data.name === null ? '' : data.name}`
   + `&ids=${idsStr}`
   + `&token=${data.user.token}`
