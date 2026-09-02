@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.CategoryMapper">
+
+    <select id="selectAll" resultType="org.example.springboot.entity.Category">
+        select * from `category`
+        <where>
+            <if test="name != null and name != ''">title like concat('%',#{name},'%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into `category` (name,info,icon,img)
+        values (#{name},#{info},#{icon},#{img})
+    </insert>
+
+    <update id="update">
+        update `category` set name = #{name},info = #{info},icon = #{icon},img = #{img},status =#{status}
+        where id = #{id}
+    </update>
+
+    <select id="selectHot" resultType="org.example.springboot.entity.Category">
+        SELECT * FROM `category`
+        WHERE status = 1
+        ORDER BY id DESC
+            LIMIT 4
+    </select>
+
+</mapper>

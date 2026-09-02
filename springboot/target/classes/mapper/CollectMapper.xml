@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.CollectMapper">
+
+    <select id="selectAll" resultType="org.example.springboot.entity.Collect">
+        select * from `collect`
+
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into `collect` (user_Id,item_Id,time,collect_price)
+        values (#{userId},#{itemId},#{time},#{collectPrice})
+    </insert>
+
+    <update id="update">
+        update `collect` set user_id = #{userId} ,item_id = #{itemId} where id = #{id}
+    </update>
+
+    <select id="selectOne" resultType="org.example.springboot.entity.Collect">
+        select * from collect
+        where user_id = #{userId}
+          and item_id = #{itemId}
+    </select>
+
+    <select id="selectCollectGoods" resultType="org.example.springboot.entity.Goods">
+        SELECT
+            g.*
+        FROM collect c
+                 JOIN goods g ON c.item_id = g.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.time DESC
+    </select>
+
+    <select id="selectByUserId" resultType="org.example.springboot.entity.Collect">
+        select *
+        from `collect`
+        where user_id = #{userId}
+        order by id desc
+    </select>
+
+</mapper>

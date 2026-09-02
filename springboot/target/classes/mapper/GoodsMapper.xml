@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.GoodsMapper">
+
+    <select id="selectAll" resultType="org.example.springboot.entity.Goods">
+        select * from `goods`
+        <where>
+            <if test="name != null and name != ''">name like concat('%',#{name},'%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into `goods` (name,img,img_list,category_id,price,re_price,content,place,shipment,user_id,num,status,quality,date,want_num)
+        values (#{name}, #{img},#{imgList},#{categoryId},#{price},#{rePrice},#{content},#{place},#{shipment},#{userId},#{num},#{status},#{quality},#{date},#{wantNum})
+    </insert>
+
+    <update id="update">
+        update `goods` set name = #{name} ,img = #{img},img_list= #{imgList},category_id = #{categoryId},price = #{price},re_price = #{rePrice},
+                           content = #{content},place = #{place},shipment = #{shipment},user_id = #{userId},num = #{num},status = #{status},
+                           quality = #{quality},date = #{date},want_num = #{wantNum}
+        where id = #{id}
+    </update>
+
+    <select id="selectHot" resultType="org.example.springboot.entity.Goods">
+        SELECT * FROM `goods`
+        WHERE status = "已上架"
+        ORDER BY num DESC
+            LIMIT 12
+
+    </select>
+
+    <select id="selectByCategoryId" resultType="org.example.springboot.entity.Goods">
+        SELECT * FROM goods
+        WHERE category_id = #{categoryId}
+          AND status = "已上架"
+        ORDER BY num DESC
+            LIMIT 3
+    </select>
+
+    <select id="selectFrontList" resultType="org.example.springboot.entity.Goods">
+        SELECT *
+        FROM goods
+        <where>
+            <if test="categoryId != null and categoryId != 0">
+                AND category_id = #{categoryId}
+            </if>
+
+            <if test="keyword != null and keyword != ''">
+                AND name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+
+        <choose>
+            <when test="sortType == 'new'">
+                ORDER BY date DESC
+            </when>
+
+            <when test="sortType == 'priceAsc'">
+                ORDER BY price ASC
+            </when>
+
+            <when test="sortType == 'priceDesc'">
+                ORDER BY price DESC
+            </when>
+
+            <otherwise>
+                ORDER BY num DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+    <select id="selectByCategory" resultType="org.example.springboot.entity.Goods">
+        SELECT *
+        FROM goods
+        WHERE category_id = #{categoryId}
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+        ORDER BY num DESC
+
+    </select>
+    <update id="addWantNum" >
+        update `goods` set want_num = want_num + 1 where id = #{id}
+    </update>
+
+    <update id="reduceWantNum">
+        update `goods` set want_num = want_num - 1
+        where id = #{id} and want_num > 0
+    </update>
+
+    <update id="updateNum">
+        UPDATE goods
+        SET num = num + 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByUserId" resultType="org.example.springboot.entity.Goods">
+        SELECT * FROM goods
+        WHERE user_id = #{userId}
+        ORDER BY num DESC
+
+    </select>
+
+
+
+
+
+</mapper>

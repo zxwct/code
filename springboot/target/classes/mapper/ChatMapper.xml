@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.ChatMapper">
+
+    <select id="selectAll" resultType="org.example.springboot.entity.Chat">
+        select * from `chat`
+        <where>
+            <if test="text != null and text != ''">text like concat('%',#{text},'%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into `chat` (text,type,time,from_user_id,to_user_id,is_read)
+        values (#{text},#{type},#{time},#{fromUserId},#{toUserId},#{isRead})
+    </insert>
+
+    <update id="update">
+        update `chat` set text = #{text} ,type = #{type},time = #{time},from_user_id = #{fromUserId},to_user_id = #{toUserId}
+                        ,is_read = #{isRead} where id = #{id}
+    </update>
+
+    <select id="selectByUserId" resultType="org.example.springboot.entity.Chat">
+        select *
+        from chat
+        WHERE from_user_id = #{userId}
+          OR to_user_id = #{userId}
+        ORDER BY time DESC
+    </select>
+
+    <select id="selectMessage" resultType="org.example.springboot.entity.Chat">
+        select *
+        from chat
+        WHERE
+            (from_user_id = #{fromUserId} AND to_user_id = #{toUserId})
+           OR
+            (from_user_id = #{toUserId} AND to_user_id = #{fromUserId})
+        ORDER BY time
+    </select>
+
+    <select id="selectClear" resultType="org.example.springboot.entity.Chat">
+        select *
+        from chat
+        WHERE
+            from_user_id = #{toUserId}
+           AND
+             to_user_id = #{fromUserId}
+           AND
+             is_read = false
+        ORDER BY time
+    </select>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="chat" separator=";">
+            UPDATE chat
+            SET is_read = #{chat.read}
+            WHERE id = #{chat.id}
+        </foreach>
+    </update>
+
+</mapper>

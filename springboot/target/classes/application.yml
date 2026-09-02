@@ -1,0 +1,43 @@
+server:
+  port: 9999
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/code?userUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB       # 单个文件大小限制
+      max-request-size: 50MB   # 总请求大小限制
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      timeout: 5000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+# 新增强制编码设置
+main:
+  banner-mode: off
+  web-application-type: servlet
+  # 强制使用UTF-8编码
+  jvm-arguments: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+
+# 新增日志配置
+logging:
+  charset:
+    console: UTF-8  # 控制台日志编码
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"  # 日志格式
+  level:
+    root: info  # 根日志级别
+    org.example.springboot.exception: debug  # 您的异常包日志级别

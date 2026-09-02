@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.UserMapper">
+
+    <select id="selectAll" resultType="org.example.springboot.entity.User">
+        select * from `user`
+        <where>
+            <if test="username != null and username != ''">username like concat('%',#{username},'%')</if>
+            <if test="name != null and name != ''">and name like concat('%',#{name},'%')</if>
+            <if test="ids != null and ids != ''">
+                and id in
+                 <foreach collection="idsArr" open="(" close=")" separator="," item="id">
+                     #{id}
+                 </foreach>
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into `user` (username,password, name, phone, email,role,avatar,tag)
+        values (#{username},#{password}, #{name}, #{phone}, #{email},#{role},#{avatar},#{tag})
+    </insert>
+
+    <update id="update">
+        update `user` set username = #{username} ,password = #{password},name = #{name},
+                          phone = #{phone},email = #{email},avatar = #{avatar},tag = #{tag}
+        where id = #{id}
+    </update>
+
+    <select id="selectBatchIds" resultType="org.example.springboot.entity.User">
+        SELECT *
+        FROM user
+        WHERE id IN
+        <foreach collection="ids"
+                 item="id"
+                 open="("
+                 separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
