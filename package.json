@@ -1,0 +1,10 @@
+{
+  "name": "code",
+  "private": true,
+  "workspaces": [
+    "vue"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace vue"
+  }
+}

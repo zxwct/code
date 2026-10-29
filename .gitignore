@@ -1,0 +1,11 @@
+.idea/
+node_modules/
+vue/node_modules/
+vue/dist/
+springboot/target/
+*.zip
+code.sql
+deploy/baota/release/
+deploy/baota/build-backend/
+deploy/baota/ssh/
+deploy/baota/runtime/
